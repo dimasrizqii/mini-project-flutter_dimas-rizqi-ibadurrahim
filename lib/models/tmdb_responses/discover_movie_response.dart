@@ -1,126 +1,82 @@
 import 'dart:convert';
 
 class DiscoverMovieResponse {
-    int? page;
-    List<DiscoverMovieModel>? results;
-    int? totalPages;
-    int? totalResults;
+  int page;
+  List<DiscoverMovieModel> results;
+  int totalPages;
+  int totalResults;
 
-    DiscoverMovieResponse({
-        this.page,
-        this.results,
-        this.totalPages,
-        this.totalResults,
-    });
+  DiscoverMovieResponse({
+    required this.page,
+    required this.results,
+    required this.totalPages,
+    required this.totalResults,
+  });
 
-    factory DiscoverMovieResponse.fromJson(String str) => DiscoverMovieResponse.fromMap(json.decode(str));
+  factory DiscoverMovieResponse.fromJson(String str) =>
+      DiscoverMovieResponse.fromMap(json.decode(str));
 
-    String toJson() => json.encode(toMap());
+  String toJson() => json.encode(toMap());
 
-    factory DiscoverMovieResponse.fromMap(Map<String, dynamic> json) => DiscoverMovieResponse(
+  factory DiscoverMovieResponse.fromMap(Map<String, dynamic> json) =>
+      DiscoverMovieResponse(
         page: json["page"],
-        results: json["results"] == null ? [] : List<DiscoverMovieModel>.from(json["results"]!.map((x) => DiscoverMovieModel.fromMap(x))),
+        results: List<DiscoverMovieModel>.from(
+            json["results"].map((x) => DiscoverMovieModel.fromMap(x))),
         totalPages: json["total_pages"],
         totalResults: json["total_results"],
-    );
+      );
 
-    Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMap() => {
         "page": page,
-        "results": results == null ? [] : List<dynamic>.from(results!.map((x) => x.toMap())),
+        "results": List<dynamic>.from(results.map((x) => x.toMap())),
         "total_pages": totalPages,
         "total_results": totalResults,
-    };
+      };
 }
 
 class DiscoverMovieModel {
-    bool? adult;
-    String? backdropPath;
-    List<int>? genreIds;
-    int? id;
-    OriginalLanguage? originalLanguage;
-    String? originalTitle;
-    String? overview;
-    double? popularity;
-    String? posterPath;
-    DateTime? releaseDate;
-    String? title;
-    bool? video;
-    double? voteAverage;
-    int? voteCount;
+  String? backdropPath;
+  int id;
+  String overview;
+  String? posterPath;
+  String title;
+  double voteAverage;
+  int voteCount;
 
-    DiscoverMovieModel({
-        this.adult,
-        this.backdropPath,
-        this.genreIds,
-        this.id,
-        this.originalLanguage,
-        this.originalTitle,
-        this.overview,
-        this.popularity,
-        this.posterPath,
-        this.releaseDate,
-        this.title,
-        this.video,
-        this.voteAverage,
-        this.voteCount,
-    });
+  DiscoverMovieModel({
+    this.backdropPath,
+    required this.id,
+    required this.overview,
+    this.posterPath,
+    required this.title,
+    required this.voteAverage,
+    required this.voteCount,
+  });
 
-    factory DiscoverMovieModel.fromJson(String str) => DiscoverMovieModel.fromMap(json.decode(str));
+  factory DiscoverMovieModel.fromJson(String str) =>
+      DiscoverMovieModel.fromMap(json.decode(str));
 
-    String toJson() => json.encode(toMap());
+  String toJson() => json.encode(toMap());
 
-    factory DiscoverMovieModel.fromMap(Map<String, dynamic> json) => DiscoverMovieModel(
-        adult: json["adult"],
+  factory DiscoverMovieModel.fromMap(Map<String, dynamic> json) =>
+      DiscoverMovieModel(
         backdropPath: json["backdrop_path"],
-        genreIds: json["genre_ids"] == null ? [] : List<int>.from(json["genre_ids"]!.map((x) => x)),
         id: json["id"],
-        originalLanguage: originalLanguageValues.map[json["original_language"]]!,
-        originalTitle: json["original_title"],
         overview: json["overview"],
-        popularity: json["popularity"]?.toDouble(),
         posterPath: json["poster_path"],
-        releaseDate: json["release_date"] == null ? null : DateTime.parse(json["release_date"]),
         title: json["title"],
-        video: json["video"],
         voteAverage: json["vote_average"]?.toDouble(),
         voteCount: json["vote_count"],
-    );
+      );
 
-    Map<String, dynamic> toMap() => {
-        "adult": adult,
+  Map<String, dynamic> toMap() => {
         "backdrop_path": backdropPath,
-        "genre_ids": genreIds == null ? [] : List<dynamic>.from(genreIds!.map((x) => x)),
         "id": id,
-        "original_language": originalLanguageValues.reverse[originalLanguage],
-        "original_title": originalTitle,
         "overview": overview,
-        "popularity": popularity,
         "poster_path": posterPath,
-        "release_date": "${releaseDate!.year.toString().padLeft(4, '0')}-${releaseDate!.month.toString().padLeft(2, '0')}-${releaseDate!.day.toString().padLeft(2, '0')}",
         "title": title,
-        "video": video,
         "vote_average": voteAverage,
         "vote_count": voteCount,
-    };
-}
-
-enum OriginalLanguage { EN, ES, NL, KO }
-
-final originalLanguageValues = EnumValues({
-    "en": OriginalLanguage.EN,
-    "es": OriginalLanguage.ES,
-    "ko": OriginalLanguage.KO,
-    "nl": OriginalLanguage.NL
-});
-
-class EnumValues<T> {
-    Map<String, T> map;
-    late Map<T, String> reverseMap;
-
-    EnumValues(this.map);
-
-    Map<T, String> get reverse {
-        reverseMap = map.map((k, v) => MapEntry(v, k));
-        return reverseMap;
-    }
+      };
 }
