@@ -1,21 +1,17 @@
-// To parse this JSON data, do
-//
-//     final movieResponse = movieResponseFromMap(jsonString);
-
 import 'dart:convert';
 
 class DiscoverMovieResponse {
-    DiscoverMovieResponse({
-        required this.page,
-        required this.results,
-        required this.totalPages,
-        required this.totalResults,
-    });
+    int? page;
+    List<DiscoverMovieModel>? results;
+    int? totalPages;
+    int? totalResults;
 
-    final int page;
-    final List<DiscoverMovieModel> results;
-    final int totalPages;
-    final int totalResults;
+    DiscoverMovieResponse({
+        this.page,
+        this.results,
+        this.totalPages,
+        this.totalResults,
+    });
 
     factory DiscoverMovieResponse.fromJson(String str) => DiscoverMovieResponse.fromMap(json.decode(str));
 
@@ -23,51 +19,51 @@ class DiscoverMovieResponse {
 
     factory DiscoverMovieResponse.fromMap(Map<String, dynamic> json) => DiscoverMovieResponse(
         page: json["page"],
-        results: List<DiscoverMovieModel>.from(json["results"].map((x) => DiscoverMovieModel.fromMap(x))),
+        results: json["results"] == null ? [] : List<DiscoverMovieModel>.from(json["results"]!.map((x) => DiscoverMovieModel.fromMap(x))),
         totalPages: json["total_pages"],
         totalResults: json["total_results"],
     );
 
     Map<String, dynamic> toMap() => {
         "page": page,
-        "results": List<dynamic>.from(results.map((x) => x.toMap())),
+        "results": results == null ? [] : List<dynamic>.from(results!.map((x) => x.toMap())),
         "total_pages": totalPages,
         "total_results": totalResults,
     };
 }
 
 class DiscoverMovieModel {
-    DiscoverMovieModel({
-        required this.adult,
-        required this.backdropPath,
-        required this.genreIds,
-        required this.id,
-        required this.originalLanguage,
-        required this.originalTitle,
-        required this.overview,
-        required this.popularity,
-        required this.posterPath,
-        required this.releaseDate,
-        required this.title,
-        required this.video,
-        required this.voteAverage,
-        required this.voteCount,
-    });
+    bool? adult;
+    String? backdropPath;
+    List<int>? genreIds;
+    int? id;
+    OriginalLanguage? originalLanguage;
+    String? originalTitle;
+    String? overview;
+    double? popularity;
+    String? posterPath;
+    DateTime? releaseDate;
+    String? title;
+    bool? video;
+    double? voteAverage;
+    int? voteCount;
 
-    final bool adult;
-    final String backdropPath;
-    final List<int> genreIds;
-    final int id;
-    final OriginalLanguage originalLanguage;
-    final String originalTitle;
-    final String overview;
-    final double popularity;
-    final String posterPath;
-    final DateTime releaseDate;
-    final String title;
-    final bool video;
-    final double voteAverage;
-    final int voteCount;
+    DiscoverMovieModel({
+        this.adult,
+        this.backdropPath,
+        this.genreIds,
+        this.id,
+        this.originalLanguage,
+        this.originalTitle,
+        this.overview,
+        this.popularity,
+        this.posterPath,
+        this.releaseDate,
+        this.title,
+        this.video,
+        this.voteAverage,
+        this.voteCount,
+    });
 
     factory DiscoverMovieModel.fromJson(String str) => DiscoverMovieModel.fromMap(json.decode(str));
 
@@ -76,14 +72,14 @@ class DiscoverMovieModel {
     factory DiscoverMovieModel.fromMap(Map<String, dynamic> json) => DiscoverMovieModel(
         adult: json["adult"],
         backdropPath: json["backdrop_path"],
-        genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
+        genreIds: json["genre_ids"] == null ? [] : List<int>.from(json["genre_ids"]!.map((x) => x)),
         id: json["id"],
         originalLanguage: originalLanguageValues.map[json["original_language"]]!,
         originalTitle: json["original_title"],
         overview: json["overview"],
         popularity: json["popularity"]?.toDouble(),
         posterPath: json["poster_path"],
-        releaseDate: DateTime.parse(json["release_date"]),
+        releaseDate: json["release_date"] == null ? null : DateTime.parse(json["release_date"]),
         title: json["title"],
         video: json["video"],
         voteAverage: json["vote_average"]?.toDouble(),
@@ -93,14 +89,14 @@ class DiscoverMovieModel {
     Map<String, dynamic> toMap() => {
         "adult": adult,
         "backdrop_path": backdropPath,
-        "genre_ids": List<dynamic>.from(genreIds.map((x) => x)),
+        "genre_ids": genreIds == null ? [] : List<dynamic>.from(genreIds!.map((x) => x)),
         "id": id,
         "original_language": originalLanguageValues.reverse[originalLanguage],
         "original_title": originalTitle,
         "overview": overview,
         "popularity": popularity,
         "poster_path": posterPath,
-        "release_date": "${releaseDate.year.toString().padLeft(4, '0')}-${releaseDate.month.toString().padLeft(2, '0')}-${releaseDate.day.toString().padLeft(2, '0')}",
+        "release_date": "${releaseDate!.year.toString().padLeft(4, '0')}-${releaseDate!.month.toString().padLeft(2, '0')}-${releaseDate!.day.toString().padLeft(2, '0')}",
         "title": title,
         "video": video,
         "vote_average": voteAverage,
@@ -108,13 +104,13 @@ class DiscoverMovieModel {
     };
 }
 
-// ignore: constant_identifier_names
-enum OriginalLanguage { EN, KO, ES }
+enum OriginalLanguage { EN, ES, NL, KO }
 
 final originalLanguageValues = EnumValues({
     "en": OriginalLanguage.EN,
     "es": OriginalLanguage.ES,
-    "ko": OriginalLanguage.KO
+    "ko": OriginalLanguage.KO,
+    "nl": OriginalLanguage.NL
 });
 
 class EnumValues<T> {
