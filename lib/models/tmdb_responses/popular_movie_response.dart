@@ -13,7 +13,7 @@ class PopularMovieResponse {
     });
 
     final int page;
-    final List<Result> results;
+    final List<PopularMovieModel> results;
     final int totalPages;
     final int totalResults;
 
@@ -23,7 +23,7 @@ class PopularMovieResponse {
 
     factory PopularMovieResponse.fromMap(Map<String, dynamic> json) => PopularMovieResponse(
         page: json["page"],
-        results: List<Result>.from(json["results"].map((x) => Result.fromMap(x))),
+        results: List<PopularMovieModel>.from(json["results"].map((x) => PopularMovieModel.fromMap(x))),
         totalPages: json["total_pages"],
         totalResults: json["total_results"],
     );
@@ -36,8 +36,8 @@ class PopularMovieResponse {
     };
 }
 
-class Result {
-    Result({
+class PopularMovieModel {
+    PopularMovieModel({
         required this.backdropPath,
         required this.id,
         required this.originalTitle,
@@ -62,11 +62,11 @@ class Result {
     final double voteAverage;
     final int voteCount;
 
-    factory Result.fromJson(String str) => Result.fromMap(json.decode(str));
+    factory PopularMovieModel.fromJson(String str) => PopularMovieModel.fromMap(json.decode(str));
 
     String toJson() => json.encode(toMap());
 
-    factory Result.fromMap(Map<String, dynamic> json) => Result(
+    factory PopularMovieModel.fromMap(Map<String, dynamic> json) => PopularMovieModel(
         backdropPath: json["backdrop_path"],
         id: json["id"],
         originalTitle: json["original_title"],

@@ -4,8 +4,8 @@
 
 import 'dart:convert';
 
-class MovieResponse {
-    MovieResponse({
+class DiscoverMovieResponse {
+    DiscoverMovieResponse({
         required this.page,
         required this.results,
         required this.totalPages,
@@ -13,17 +13,17 @@ class MovieResponse {
     });
 
     final int page;
-    final List<MovieModel> results;
+    final List<DiscoverMovieModel> results;
     final int totalPages;
     final int totalResults;
 
-    factory MovieResponse.fromJson(String str) => MovieResponse.fromMap(json.decode(str));
+    factory DiscoverMovieResponse.fromJson(String str) => DiscoverMovieResponse.fromMap(json.decode(str));
 
     String toJson() => json.encode(toMap());
 
-    factory MovieResponse.fromMap(Map<String, dynamic> json) => MovieResponse(
+    factory DiscoverMovieResponse.fromMap(Map<String, dynamic> json) => DiscoverMovieResponse(
         page: json["page"],
-        results: List<MovieModel>.from(json["results"].map((x) => MovieModel.fromMap(x))),
+        results: List<DiscoverMovieModel>.from(json["results"].map((x) => DiscoverMovieModel.fromMap(x))),
         totalPages: json["total_pages"],
         totalResults: json["total_results"],
     );
@@ -36,8 +36,8 @@ class MovieResponse {
     };
 }
 
-class MovieModel {
-    MovieModel({
+class DiscoverMovieModel {
+    DiscoverMovieModel({
         required this.adult,
         required this.backdropPath,
         required this.genreIds,
@@ -69,11 +69,11 @@ class MovieModel {
     final double voteAverage;
     final int voteCount;
 
-    factory MovieModel.fromJson(String str) => MovieModel.fromMap(json.decode(str));
+    factory DiscoverMovieModel.fromJson(String str) => DiscoverMovieModel.fromMap(json.decode(str));
 
     String toJson() => json.encode(toMap());
 
-    factory MovieModel.fromMap(Map<String, dynamic> json) => MovieModel(
+    factory DiscoverMovieModel.fromMap(Map<String, dynamic> json) => DiscoverMovieModel(
         adult: json["adult"],
         backdropPath: json["backdrop_path"],
         genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
