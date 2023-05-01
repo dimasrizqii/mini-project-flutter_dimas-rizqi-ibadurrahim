@@ -5,7 +5,7 @@ import 'package:mini_project/models/tmdb_responses/discover_movie_response.dart'
 import 'package:mini_project/models/tmdb_responses/popular_movie_response.dart';
 
 class MovieApi {
-  Future<PopularMovieResponse> getPopularMovie() async {
+  Future<PopularMovieResponse> getPopularMovie({int page = 1}) async {
     try {
       final response =
           await Dio().get('$baseUrl/movie/popular/api_key=$apiKey');
@@ -27,7 +27,7 @@ class MovieApi {
     }
   }
 
-  Future<DiscoverMovieResponse> getDiscoverMovie() async {
+  Future<DiscoverMovieResponse> getDiscoverMovie({int page = 1}) async {
     try {
       final response = await Dio().get('$baseUrl/discover/movie/api_key=$apiKey');
 

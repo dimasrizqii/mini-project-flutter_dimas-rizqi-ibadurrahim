@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mini_project/models/api/movie_api.dart';
 import 'package:mini_project/models/tmdb_responses/popular_movie_response.dart';
 
@@ -22,5 +23,20 @@ class PopularMovieProvider with ChangeNotifier {
     }
     _isLoadingPopularMovie = false;
     notifyListeners();
+  }
+
+    void getPopularMovieWithPaging(
+    BuildContext context, {
+    required PagingController pagingController,
+    required int page,
+  }) async {
+    final result = await MovieApi().getPopularMovie(page: page);
+
+    if (result.results.length < 20) {
+      pagingController.appendLastPage(result.results);
+    } else {
+      pagingController.appendPage(result.results, page + 1);
+    }
+    return;
   }
 }
