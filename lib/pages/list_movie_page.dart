@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mini_project/pages/pagination_movie_page.dart';
+import 'package:mini_project/pages/view_all_movie_page.dart';
 import 'package:mini_project/widgets/discover_movie_widget.dart';
-import 'package:mini_project/widgets/popular_movie_widget.dart';
 
 class ListMoviePage extends StatelessWidget {
   const ListMoviePage({super.key});
@@ -10,78 +9,61 @@ class ListMoviePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Mini Project TMDB"),
+        title: const Text(
+          "Movie DB",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: CustomScrollView(
         slivers: [
-          _WidgetTitle(
-            title: 'Discover Movies',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const MoviePaginationPage(
-                    type: TypeMovie.discover,
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 8,
+                left: 16,
+                bottom: 14,
+                right: 24,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Discover Movies",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
-                ),
-              );
-            },
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      shape: const StadiumBorder(),
+                      side: const BorderSide(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const ViewAllMoviePage(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      "See All",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
           const DiscoverMovieWidget(),
-          _WidgetTitle(
-            title: 'Popular Movies',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const MoviePaginationPage(
-                    type: TypeMovie.popular,
-                  ),
-                ),
-              );
-            },
-          ),
-          const PopularMovieWidget(),
-          const SliverToBoxAdapter(
-            child: SizedBox(height: 16),
-          ),
         ],
       ),
     );
   }
-}
-
-class _WidgetTitle extends SliverToBoxAdapter {
-  final String title;
-  final void Function() onPressed;
-
-  const _WidgetTitle({required this.title, required this.onPressed});
-
-  @override
-  Widget? get child => Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18.0,
-              ),
-            ),
-            OutlinedButton(
-              onPressed: onPressed,
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.black,
-                shape: const StadiumBorder(),
-                side: const BorderSide(
-                  color: Colors.black54,
-                ),
-              ),
-              child: const Text('See All'),
-            )
-          ],
-        ),
-      );
 }

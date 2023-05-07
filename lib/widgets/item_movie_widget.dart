@@ -1,29 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:mini_project/models/tmdb_responses/detail_response.dart';
-import 'package:mini_project/models/tmdb_responses/discover_movie_response.dart';
+import 'package:mini_project/constant/tmdb_api_constant.dart';
+import 'package:mini_project/models/tmdb_responses/movie_response_model.dart';
 
-import 'image_widget.dart';
+class ItemWidget extends Container {
+  final MovieModel movie;
 
-class ItemMovieWidget extends Container {
-  final DiscoverMovieModel? movie;
-  final DetailMovieResponse? movieDetail;
-  final double heightBackdrop;
-  final double widthBackdrop;
-  final double heightPoster;
-  final double widthPoster;
-  final double radius;
+  final double height;
+  final double width;
   final void Function()? onTap;
 
-  ItemMovieWidget({
-    required this.heightBackdrop,
-    required this.widthBackdrop,
-    required this.heightPoster,
-    required this.widthPoster,
-    this.radius = 12,
-    this.movie,
-    this.movieDetail,
-    this.onTap,
+  ItemWidget({
     super.key,
+    required this.movie,
+    required this.height,
+    required this.width,
+    this.onTap,
   });
 
   @override
@@ -31,67 +22,68 @@ class ItemMovieWidget extends Container {
 
   @override
   Decoration? get decoration => BoxDecoration(
-        borderRadius: BorderRadius.circular(radius),
+        borderRadius: BorderRadius.circular(10),
       );
 
   @override
   Widget? get child => Stack(
         children: [
-          ImageWidget(
-            imageSrc:
-                '${movieDetail != null ? movieDetail!.backdropPath : movie!.backdropPath}',
-            height: heightBackdrop,
-            width: widthBackdrop,
+          Image.network(
+            "$imageOriginalUrl${movie.backdropPath}",
+            height: height,
+            width: width,
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) {
+              return SizedBox(
+                height: height,
+                width: width,
+                child: const Icon(
+                  Icons.broken_image_outlined,
+                ),
+              );
+            },
           ),
           Container(
-            height: heightBackdrop,
-            width: widthBackdrop,
+            height: height,
+            width: width,
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.transparent,
-                  Colors.black87,
-                ],
-              ),
-            ),
+                gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomRight,
+              colors: [
+                Colors.transparent,
+                Colors.black87,
+              ],
+            )),
           ),
           Positioned(
-            bottom: 16.0,
-            left: 16.0,
-            right: 16.0,
+            bottom: 16,
+            left: 16,
+            right: 16,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ImageWidget(
-                  imageSrc:
-                      '${movieDetail != null ? movieDetail!.posterPath : movie!.posterPath}',
-                  height: heightPoster,
-                  width: widthPoster,
-                  radius: 12,
-                ),
-                const SizedBox(height: 8),
                 Text(
-                  "${movieDetail != null ? movieDetail!.title : movie!.title}",
+                  movie.title,
                   style: const TextStyle(
-                    fontSize: 16.0,
                     color: Colors.white,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 4),
                 Row(
                   children: [
                     const Icon(
-                      Icons.star_rounded,
+                      Icons.star,
                       color: Colors.amber,
                     ),
                     Text(
-                      '${movieDetail != null ? movieDetail!.voteAverage : movie!.voteAverage} (${movieDetail != null ? movieDetail!.voteCount : movie!.voteCount})',
+                      "${movie.voteAverage}",
                       style: const TextStyle(
-                        fontSize: 16.0,
                         color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
@@ -106,7 +98,7 @@ class ItemMovieWidget extends Container {
                 onTap: onTap,
               ),
             ),
-          ),
+          )
         ],
       );
 }

@@ -1,42 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:mini_project/models/api/movie_api.dart';
-import 'package:mini_project/models/tmdb_responses/discover_movie_response.dart';
+import 'package:mini_project/models/api/movie_repository.dart';
+import 'package:mini_project/models/tmdb_responses/movie_response_model.dart';
 
 class DiscoverMovieProvider with ChangeNotifier {
-  List<DiscoverMovieModel> _discoverMovie = [];
-  List<DiscoverMovieModel> get discoverMovie => _discoverMovie;
+  final MovieRepository _movieRepository;
+
+  DiscoverMovieProvider(
+    this._movieRepository,
+  );
 
   bool _isLoadingDiscoverMovie = false;
   bool get isLoadingDiscoverMovie => _isLoadingDiscoverMovie;
 
-  bool _isEmptyDiscoverMovie = false;
-  bool get isEmptyDiscoverMovie => _isEmptyDiscoverMovie;
+  final List<MovieModel> _movies = [];
+  List<MovieModel> get movies => _movies;
 
-  void getDiscoverMovie() async {
+  void getDiscoverMovie(BuildContext context) async {
     _isLoadingDiscoverMovie = true;
-    final result = await MovieApi().getDiscoverMovie();
-    if (result.results.isEmpty) {
-      _isEmptyDiscoverMovie = true;
-    } else {
-      _discoverMovie = result.results;
-    }
-    _isLoadingDiscoverMovie = false;
     notifyListeners();
+    final result = await _movieRepository.getDiscover();
+
+    result.fold(
+      (errorMessage) {
+        print(errorMessage);
+        _isLoadingDiscoverMovie = false;
+        notifyListeners();
+        return;
+      },
+      (response) {
+        _movies.clear();
+        _movies.addAll(response.results);
+        _isLoadingDiscoverMovie = false;
+        notifyListeners();
+        return null;
+      },
+    );
   }
 
-  void getDiscoverMovieWithPaging(
+  void getAllDiscoverMovie(
     BuildContext context, {
     required PagingController pagingController,
     required int page,
   }) async {
-    final result = await MovieApi().getDiscoverMovie(page: page);
+    final result = await _movieRepository.getDiscover(page: page);
 
-    if (result.results.length < 20) {
-      pagingController.appendLastPage(result.results);
-    } else {
-      pagingController.appendPage(result.results, page + 1);
-    }
-    return;
+    result.fold(
+      (errorMessage) {
+        print(errorMessage);
+        pagingController.error = errorMessage;
+        return;
+      },
+      (response) {
+        if (response.results.length < 20) {
+          pagingController.appendLastPage(response.results);
+        } else {
+          pagingController.appendPage(response.results, page + 1);
+        }
+        return;
+      },
+    );
   }
 }

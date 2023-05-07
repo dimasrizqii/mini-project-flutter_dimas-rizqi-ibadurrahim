@@ -1,42 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:mini_project/models/api/movie_api.dart';
-import 'package:mini_project/models/tmdb_responses/popular_movie_response.dart';
+import 'package:mini_project/models/api/movie_repository.dart';
+import 'package:mini_project/models/tmdb_responses/movie_response_model.dart';
 
 class PopularMovieProvider with ChangeNotifier {
-  List<PopularMovieModel> _popularMovie = [];
-  List<PopularMovieModel> get popularMovie => _popularMovie;
+  final MovieRepository _movieRepository;
+
+  PopularMovieProvider(
+    this._movieRepository,
+  );
 
   bool _isLoadingPopularMovie = false;
   bool get isLoadingPopularMovie => _isLoadingPopularMovie;
 
-  bool _isEmptyPopularMovie = false;
-  bool get isEmptyPopularMovie => _isEmptyPopularMovie;
+  final List<MovieModel> _movies = [];
+  List<MovieModel> get movies => _movies;
 
-  void getPopularMovie() async {
+  void getPopularMovie(BuildContext context) async {
     _isLoadingPopularMovie = true;
-    final result = await MovieApi().getPopularMovie();
-    if (result.results.isEmpty) {
-      _isEmptyPopularMovie = true;
-    } else {
-      _popularMovie = result.results;
-    }
-    _isLoadingPopularMovie = false;
     notifyListeners();
+    final result = await _movieRepository.getDiscover();
+
+    result.fold(
+      (errorMessage) {
+        print(errorMessage);
+        _isLoadingPopularMovie = false;
+        notifyListeners();
+        return;
+      },
+      (response) {
+        _movies.clear();
+        _movies.addAll(response.results);
+        _isLoadingPopularMovie = false;
+        notifyListeners();
+        return null;
+      },
+    );
   }
 
-    void getPopularMovieWithPaging(
+  void getAllPopularMovie(
     BuildContext context, {
     required PagingController pagingController,
     required int page,
   }) async {
-    final result = await MovieApi().getPopularMovie(page: page);
+    final result = await _movieRepository.getDiscover();
 
-    if (result.results.length < 20) {
-      pagingController.appendLastPage(result.results);
-    } else {
-      pagingController.appendPage(result.results, page + 1);
-    }
-    return;
+    result.fold(
+      (errorMessage) {
+        print(errorMessage);
+        pagingController.error = errorMessage;
+        return;
+      },
+      (response) {
+        if (response.results.length < 20) {
+          pagingController.appendLastPage(response.results);
+        } else {
+          pagingController.appendPage(response.results, page + 1);
+        }
+        return;
+      },
+    );
   }
 }

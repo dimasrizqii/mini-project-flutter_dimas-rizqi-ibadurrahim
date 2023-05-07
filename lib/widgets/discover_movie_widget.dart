@@ -16,7 +16,7 @@ class _DiscoverMovieWidgetState extends State<DiscoverMovieWidget> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<DiscoverMovieProvider>().getDiscoverMovie();
+      context.read<DiscoverMovieProvider>().getDiscoverMovie(context);
     });
     super.initState();
   }
@@ -28,38 +28,44 @@ class _DiscoverMovieWidgetState extends State<DiscoverMovieWidget> {
         builder: (_, provider, __) {
           if (provider.isLoadingDiscoverMovie) {
             return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16.0),
-              height: 300.0,
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              height: 580,
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Colors.black26,
                 borderRadius: BorderRadius.circular(12),
               ),
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           }
 
-          if (provider.discoverMovie.isNotEmpty) {
+          if (provider.movies.isNotEmpty) {
             return CarouselSlider.builder(
-              itemCount: provider.discoverMovie.length,
+              itemCount: provider.movies.length,
               itemBuilder: (_, index, __) {
-                final movie = provider.discoverMovie[index];
-                return ItemMovieWidget(
+                final movie = provider.movies[index];
+                return ItemWidget(
                   movie: movie,
-                  heightBackdrop: 300,
-                  widthBackdrop: double.infinity,
-                  heightPoster: 160,
-                  widthPoster: 100,
+                  height: 580,
+                  width: double.infinity,
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (_) {
-                        return DetailMoviePage(id: movie.id);
-                      },
-                    ));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) {
+                          return DetailMoviePage(
+                            id: movie.id,
+                          );
+                        },
+                      ),
+                    );
                   },
                 );
               },
               options: CarouselOptions(
-                height: 300.0,
+                height: 580,
                 viewportFraction: 0.8,
                 reverse: false,
                 autoPlay: true,
@@ -71,8 +77,8 @@ class _DiscoverMovieWidgetState extends State<DiscoverMovieWidget> {
           }
 
           return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16.0),
-            height: 300.0,
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            height: 300,
             width: double.infinity,
             decoration: BoxDecoration(
               color: Colors.black26,
@@ -80,10 +86,8 @@ class _DiscoverMovieWidgetState extends State<DiscoverMovieWidget> {
             ),
             child: const Center(
               child: Text(
-                'Not found discover movies',
-                style: TextStyle(
-                  color: Colors.black45,
-                ),
+                "Not Found Discover Movie",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
           );

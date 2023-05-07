@@ -16,7 +16,7 @@ class _PopularMovieWidgetState extends State<PopularMovieWidget> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<PopularMovieProvider>().getPopularMovie();
+      context.read<PopularMovieProvider>().getPopularMovie(context);
     });
     super.initState();
   }
@@ -28,32 +28,39 @@ class _PopularMovieWidgetState extends State<PopularMovieWidget> {
         builder: (_, provider, __) {
           if (provider.isLoadingPopularMovie) {
             return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16.0),
-              height: 300.0,
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              height: 300,
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Colors.black26,
                 borderRadius: BorderRadius.circular(12),
               ),
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           }
 
-          if (provider.popularMovie.isNotEmpty) {
+          if (provider.movies.isNotEmpty) {
             return CarouselSlider.builder(
-              itemCount: provider.popularMovie.length,
+              itemCount: provider.movies.length,
               itemBuilder: (_, index, __) {
-                final movie = provider.popularMovie[index];
-                return ItemMovieWidget(
-                  heightBackdrop: 300,
-                  widthBackdrop: double.infinity,
-                  heightPoster: 160,
-                  widthPoster: 100,
+                final movie = provider.movies[index];
+                return ItemWidget(
+                  movie: movie,
+                  height: 300,
+                  width: double.infinity,
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (_) {
-                        return DetailMoviePage(id: movie.id);
-                      },
-                    ));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) {
+                          return DetailMoviePage(
+                            id: movie.id,
+                          );
+                        },
+                      ),
+                    );
                   },
                 );
               },
@@ -70,8 +77,8 @@ class _PopularMovieWidgetState extends State<PopularMovieWidget> {
           }
 
           return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16.0),
-            height: 300.0,
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            height: 300,
             width: double.infinity,
             decoration: BoxDecoration(
               color: Colors.black26,
@@ -79,10 +86,8 @@ class _PopularMovieWidgetState extends State<PopularMovieWidget> {
             ),
             child: const Center(
               child: Text(
-                'Not found popular movies',
-                style: TextStyle(
-                  color: Colors.black45,
-                ),
+                "Not Found Popular Movie",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
           );
