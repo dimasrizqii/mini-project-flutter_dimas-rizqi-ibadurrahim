@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mini_project/models/api/movie_repository.dart';
-import 'package:mini_project/models/tmdb_responses/detail_response.dart';
+import 'package:mini_project/models/repository/movie_repository.dart';
+import 'package:mini_project/models/tmdb_responses/detail_movie_response_model.dart';
 
 class DetailMovieProvider with ChangeNotifier {
   final MovieRepository _movieRepository;
@@ -9,8 +9,8 @@ class DetailMovieProvider with ChangeNotifier {
     this._movieRepository,
   );
 
-  DetailMovieModel? _movies;
-  DetailMovieModel? get movies => _movies;
+  DetailMovieResponseModel? _detailMovies;
+  DetailMovieResponseModel? get detailMovies => _detailMovies;
 
   bool _isLoadingDetailMovie = false;
   bool get isLoadingDetailMovie => _isLoadingDetailMovie;
@@ -23,12 +23,12 @@ class DetailMovieProvider with ChangeNotifier {
       (messageError) {
         print(messageError);
         _isLoadingDetailMovie = false;
-        _movies = null;
+        _detailMovies = null;
         notifyListeners();
         return;
       },
       (response) {
-        _movies = response;
+        _detailMovies = response;
         notifyListeners();
         return;
       },

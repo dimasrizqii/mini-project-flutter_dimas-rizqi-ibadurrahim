@@ -1,22 +1,22 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:mini_project/pages/detail_movie_page.dart';
-import 'package:mini_project/providers/popular_movie_provider.dart';
+import 'package:mini_project/providers/top_rated_movie_provider.dart';
 import 'package:mini_project/widgets/item_movie_widget.dart';
 import 'package:provider/provider.dart';
 
-class PopularMovieWidget extends StatefulWidget {
-  const PopularMovieWidget({super.key});
+class TopRatedMovieWidget extends StatefulWidget {
+  const TopRatedMovieWidget({super.key});
 
   @override
-  State<PopularMovieWidget> createState() => _PopularMovieWidgetState();
+  State<TopRatedMovieWidget> createState() => _TopRatedMovieWidgetState();
 }
 
-class _PopularMovieWidgetState extends State<PopularMovieWidget> {
+class _TopRatedMovieWidgetState extends State<TopRatedMovieWidget> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<PopularMovieProvider>().getPopularMovie(context);
+      context.read<TopRatedMovieProvider>().getTopRatedMovie(context);
     });
     super.initState();
   }
@@ -24,7 +24,7 @@ class _PopularMovieWidgetState extends State<PopularMovieWidget> {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Consumer<PopularMovieProvider>(
+      child: Consumer<TopRatedMovieProvider>(
         builder: (_, provider, __) {
           if (provider.isLoadingPopularMovie) {
             return Container(
@@ -46,7 +46,7 @@ class _PopularMovieWidgetState extends State<PopularMovieWidget> {
               itemCount: provider.movies.length,
               itemBuilder: (_, index, __) {
                 final movie = provider.movies[index];
-                return ItemWidget(
+                return ItemMovieWidget(
                   movie: movie,
                   height: 300,
                   width: double.infinity,
@@ -86,7 +86,7 @@ class _PopularMovieWidgetState extends State<PopularMovieWidget> {
             ),
             child: const Center(
               child: Text(
-                "Not Found Popular Movie",
+                "Not Found Top Rated Movie",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),

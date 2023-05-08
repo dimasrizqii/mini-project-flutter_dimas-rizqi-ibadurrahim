@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:mini_project/models/api/movie_repository.dart';
+import 'package:mini_project/models/repository/movie_repository.dart';
 import 'package:mini_project/models/tmdb_responses/movie_response_model.dart';
 
 class DiscoverMovieProvider with ChangeNotifier {

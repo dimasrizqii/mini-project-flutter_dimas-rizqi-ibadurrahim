@@ -1,37 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:mini_project/models/api/movie_repository.dart';
+import 'package:mini_project/models/repository/movie_repository.dart';
 import 'package:mini_project/models/tmdb_responses/movie_response_model.dart';
 
-class PopularMovieProvider with ChangeNotifier {
+class TopRatedMovieProvider with ChangeNotifier {
   final MovieRepository _movieRepository;
 
-  PopularMovieProvider(
+  TopRatedMovieProvider(
     this._movieRepository,
   );
 
-  bool _isLoadingPopularMovie = false;
-  bool get isLoadingPopularMovie => _isLoadingPopularMovie;
+  bool _isLoadingTopRatedMovie = false;
+  bool get isLoadingPopularMovie => _isLoadingTopRatedMovie;
 
   final List<MovieModel> _movies = [];
   List<MovieModel> get movies => _movies;
 
-  void getPopularMovie(BuildContext context) async {
-    _isLoadingPopularMovie = true;
+  void getTopRatedMovie(BuildContext context) async {
+    _isLoadingTopRatedMovie = true;
     notifyListeners();
-    final result = await _movieRepository.getDiscover();
+    final result = await _movieRepository.getTopRated();
 
     result.fold(
       (errorMessage) {
         print(errorMessage);
-        _isLoadingPopularMovie = false;
+        _isLoadingTopRatedMovie = false;
         notifyListeners();
         return;
       },
       (response) {
         _movies.clear();
         _movies.addAll(response.results);
-        _isLoadingPopularMovie = false;
+        _isLoadingTopRatedMovie = false;
         notifyListeners();
         return null;
       },
@@ -43,7 +43,7 @@ class PopularMovieProvider with ChangeNotifier {
     required PagingController pagingController,
     required int page,
   }) async {
-    final result = await _movieRepository.getDiscover();
+    final result = await _movieRepository.getTopRated(page: page);
 
     result.fold(
       (errorMessage) {

@@ -1,35 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:mini_project/constant/tmdb_api_constant.dart';
-import 'package:mini_project/models/tmdb_responses/movie_response_model.dart';
+import 'package:mini_project/models/tmdb_responses/detail_movie_response_model.dart';
 
-class ItemMovieWidget extends Container {
-  final MovieModel movie;
+class DetailItemMovieWidget extends Container {
+  final DetailMovieResponseModel detailMovie;
 
   final double height;
   final double width;
-  final void Function()? onTap;
 
-  ItemMovieWidget({
+  DetailItemMovieWidget({
     super.key,
-    required this.movie,
+    required this.detailMovie,
     required this.height,
     required this.width,
-    this.onTap,
   });
-
-  @override
-  Clip get clipBehavior => Clip.hardEdge;
-
-  @override
-  Decoration? get decoration => BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-      );
 
   @override
   Widget? get child => Stack(
         children: [
           Image.network(
-            "$imageOriginalUrl${movie.backdropPath}",
+            "$imageOriginalUrl${detailMovie.posterPath}",
             height: height,
             width: width,
             fit: BoxFit.cover,
@@ -64,26 +54,44 @@ class ItemMovieWidget extends Container {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  movie.title,
+                  detailMovie.title,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 8),
                 Row(
                   children: [
                     const Icon(
-                      Icons.star,
-                      color: Colors.amber,
+                      Icons.favorite,
+                      color: Colors.red,
                     ),
-                    const SizedBox(width: 4),
+                    const SizedBox(width: 8),
                     Text(
-                      "${movie.voteAverage}",
+                      detailMovie.popularity.ceil().toString(),
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 18,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.date_range,
+                      color: Colors.green,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      detailMovie.releaseDate.toString().split(" ").first,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -92,14 +100,6 @@ class ItemMovieWidget extends Container {
               ],
             ),
           ),
-          Positioned.fill(
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: onTap,
-              ),
-            ),
-          )
         ],
       );
 }

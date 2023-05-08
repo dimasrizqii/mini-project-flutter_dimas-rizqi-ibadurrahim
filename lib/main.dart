@@ -3,7 +3,7 @@ import 'package:mini_project/di/injection.dart';
 import 'package:mini_project/pages/list_movie_page.dart';
 import 'package:mini_project/providers/detail_movie_provider.dart';
 import 'package:mini_project/providers/discover_movie_provider.dart';
-import 'package:mini_project/providers/popular_movie_provider.dart';
+import 'package:mini_project/providers/top_rated_movie_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -22,7 +22,7 @@ class MainApp extends StatelessWidget {
           create: (_) => getIt<DiscoverMovieProvider>(),
         ),
         ChangeNotifierProvider(
-          create: (_) => getIt<PopularMovieProvider>(),
+          create: (_) => getIt<TopRatedMovieProvider>(),
         ),
         ChangeNotifierProvider(
           create: (_) => getIt<DetailMovieProvider>(),

@@ -29,7 +29,7 @@ class _DiscoverMovieWidgetState extends State<DiscoverMovieWidget> {
           if (provider.isLoadingDiscoverMovie) {
             return Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
-              height: 580,
+              height: 300,
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Colors.black26,
@@ -46,9 +46,9 @@ class _DiscoverMovieWidgetState extends State<DiscoverMovieWidget> {
               itemCount: provider.movies.length,
               itemBuilder: (_, index, __) {
                 final movie = provider.movies[index];
-                return ItemWidget(
+                return ItemMovieWidget(
                   movie: movie,
-                  height: 580,
+                  height: 300,
                   width: double.infinity,
                   onTap: () {
                     Navigator.push(
@@ -65,7 +65,7 @@ class _DiscoverMovieWidgetState extends State<DiscoverMovieWidget> {
                 );
               },
               options: CarouselOptions(
-                height: 580,
+                height: 300,
                 viewportFraction: 0.8,
                 reverse: false,
                 autoPlay: true,

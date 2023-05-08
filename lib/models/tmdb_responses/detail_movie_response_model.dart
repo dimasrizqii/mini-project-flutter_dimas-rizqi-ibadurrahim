@@ -1,5 +1,5 @@
-class DetailMovieModel {
-  DetailMovieModel({
+class DetailMovieResponseModel {
+  DetailMovieResponseModel({
     required this.adult,
     this.backdropPath = '',
     required this.budget,
@@ -35,8 +35,8 @@ class DetailMovieModel {
   final double voteAverage;
   final int voteCount;
 
-  factory DetailMovieModel.fromMap(Map<String, dynamic> json) =>
-      DetailMovieModel(
+  factory DetailMovieResponseModel.fromMap(Map<String, dynamic> json) =>
+      DetailMovieResponseModel(
         adult: json["adult"],
         backdropPath: json["backdrop_path"],
         budget: json["budget"],
