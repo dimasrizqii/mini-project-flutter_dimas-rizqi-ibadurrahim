@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mini_project/pages/view_all_discover_movie_page.dart';
-import 'package:mini_project/pages/view_all_popular_movie_page.dart';
-import 'package:mini_project/widgets/discover_movie_widget.dart';
-import 'package:mini_project/widgets/top_rated_movie_widget.dart';
+import 'package:mini_project/ui/discover/view_all_discover_movie_page.dart';
+import 'package:mini_project/ui/top_rated/view_all_popular_movie_page.dart';
+import 'package:mini_project/ui/discover/discover_movie_widget.dart';
+import 'package:mini_project/ui/top_rated/top_rated_movie_widget.dart';
 
 class ListMoviePage extends StatelessWidget {
   const ListMoviePage({super.key});

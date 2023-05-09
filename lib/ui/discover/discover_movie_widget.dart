@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:mini_project/pages/detail_movie_page.dart';
-import 'package:mini_project/providers/discover_movie_provider.dart';
+import 'package:mini_project/ui/detail/detail_movie_page.dart';
+import 'package:mini_project/ui/discover/discover_movie_view_model.dart';
 import 'package:mini_project/widgets/item_movie_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +16,7 @@ class _DiscoverMovieWidgetState extends State<DiscoverMovieWidget> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<DiscoverMovieProvider>().getDiscoverMovie(context);
+      context.read<DiscoverMovieViewModel>().getDiscoverMovie(context);
     });
     super.initState();
   }
@@ -24,7 +24,7 @@ class _DiscoverMovieWidgetState extends State<DiscoverMovieWidget> {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Consumer<DiscoverMovieProvider>(
+      child: Consumer<DiscoverMovieViewModel>(
         builder: (_, provider, __) {
           if (provider.isLoadingDiscoverMovie) {
             return Container(

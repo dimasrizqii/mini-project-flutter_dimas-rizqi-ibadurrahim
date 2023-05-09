@@ -3,47 +3,47 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mini_project/models/repository/movie_repository.dart';
 import 'package:mini_project/models/tmdb_responses/movie_response_model.dart';
 
-class TopRatedMovieProvider with ChangeNotifier {
+class DiscoverMovieViewModel with ChangeNotifier {
   final MovieRepository _movieRepository;
 
-  TopRatedMovieProvider(
+  DiscoverMovieViewModel(
     this._movieRepository,
   );
 
-  bool _isLoadingTopRatedMovie = false;
-  bool get isLoadingPopularMovie => _isLoadingTopRatedMovie;
+  bool _isLoadingDiscoverMovie = false;
+  bool get isLoadingDiscoverMovie => _isLoadingDiscoverMovie;
 
   final List<MovieModel> _movies = [];
   List<MovieModel> get movies => _movies;
 
-  void getTopRatedMovie(BuildContext context) async {
-    _isLoadingTopRatedMovie = true;
+  void getDiscoverMovie(BuildContext context) async {
+    _isLoadingDiscoverMovie = true;
     notifyListeners();
-    final result = await _movieRepository.getTopRated();
+    final result = await _movieRepository.getDiscover();
 
     result.fold(
       (errorMessage) {
         print(errorMessage);
-        _isLoadingTopRatedMovie = false;
+        _isLoadingDiscoverMovie = false;
         notifyListeners();
         return;
       },
       (response) {
         _movies.clear();
         _movies.addAll(response.results);
-        _isLoadingTopRatedMovie = false;
+        _isLoadingDiscoverMovie = false;
         notifyListeners();
         return null;
       },
     );
   }
 
-  void getAllPopularMovie(
+  void getAllDiscoverMovie(
     BuildContext context, {
     required PagingController pagingController,
     required int page,
   }) async {
-    final result = await _movieRepository.getTopRated(page: page);
+    final result = await _movieRepository.getDiscover(page: page);
 
     result.fold(
       (errorMessage) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mini_project/di/injection.dart';
-import 'package:mini_project/providers/detail_movie_provider.dart';
-import 'package:mini_project/widgets/detail_item_movie_widget.dart';
+import 'package:mini_project/ui/detail/detail_movie_view_model.dart';
+import 'package:mini_project/ui/detail/detail_item_movie_widget.dart';
 import 'package:provider/provider.dart';
 
 class DetailMoviePage extends StatelessWidget {
@@ -12,7 +12,7 @@ class DetailMoviePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => getIt<DetailMovieProvider>()..getDetail(context, id: id),
+      create: (_) => getIt<DetailMovieViewModel>()..getDetail(context, id: id),
       builder: (_, __) => Scaffold(
         body: CustomScrollView(
           slivers: [
@@ -34,7 +34,7 @@ class _DetailMovieAppBarWidget extends SliverAppBar {
   double? get expandedHeight => 480;
 
   @override
-  Widget? get flexibleSpace => Consumer<DetailMovieProvider>(
+  Widget? get flexibleSpace => Consumer<DetailMovieViewModel>(
         builder: (_, provider, __) {
           final detailMovie = provider.detailMovies;
 
@@ -53,7 +53,7 @@ class _DetailMovieAppBarWidget extends SliverAppBar {
 
 class _DetailMovieBoxWidget extends SliverToBoxAdapter {
   @override
-  Widget? get child => Consumer<DetailMovieProvider>(
+  Widget? get child => Consumer<DetailMovieViewModel>(
         builder: (_, provider, __) {
           final detailMovie = provider.detailMovies;
 

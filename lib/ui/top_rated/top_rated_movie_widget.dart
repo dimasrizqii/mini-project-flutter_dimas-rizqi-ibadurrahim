@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:mini_project/pages/detail_movie_page.dart';
-import 'package:mini_project/providers/top_rated_movie_provider.dart';
+import 'package:mini_project/ui/detail/detail_movie_page.dart';
+import 'package:mini_project/ui/top_rated/top_rated_movie_view_model.dart';
 import 'package:mini_project/widgets/item_movie_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +16,7 @@ class _TopRatedMovieWidgetState extends State<TopRatedMovieWidget> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<TopRatedMovieProvider>().getTopRatedMovie(context);
+      context.read<TopRatedMovieViewModel>().getTopRatedMovie(context);
     });
     super.initState();
   }
@@ -24,7 +24,7 @@ class _TopRatedMovieWidgetState extends State<TopRatedMovieWidget> {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Consumer<TopRatedMovieProvider>(
+      child: Consumer<TopRatedMovieViewModel>(
         builder: (_, provider, __) {
           if (provider.isLoadingPopularMovie) {
             return Container(

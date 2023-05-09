@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mini_project/models/tmdb_responses/movie_response_model.dart';
-import 'package:mini_project/pages/detail_movie_page.dart';
-import 'package:mini_project/providers/top_rated_movie_provider.dart';
+import 'package:mini_project/ui/detail/detail_movie_page.dart';
+import 'package:mini_project/ui/discover/discover_movie_view_model.dart';
 import 'package:mini_project/widgets/item_movie_widget.dart';
 import 'package:provider/provider.dart';
 
-class ViewAllTopRatedMoviePage extends StatefulWidget {
-  const ViewAllTopRatedMoviePage({super.key});
+class ViewAllDiscoverMoviePage extends StatefulWidget {
+  const ViewAllDiscoverMoviePage({super.key});
 
   @override
-  State<ViewAllTopRatedMoviePage> createState() => _ViewAllTopRatedMoviePageState();
+  State<ViewAllDiscoverMoviePage> createState() => _ViewAllDiscoverMoviePageState();
 }
 
-class _ViewAllTopRatedMoviePageState extends State<ViewAllTopRatedMoviePage> {
+class _ViewAllDiscoverMoviePageState extends State<ViewAllDiscoverMoviePage> {
   final PagingController<int, MovieModel> _pagingController = PagingController(
     firstPageKey: 1,
   );
@@ -21,7 +21,7 @@ class _ViewAllTopRatedMoviePageState extends State<ViewAllTopRatedMoviePage> {
   @override
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
-      context.read<TopRatedMovieProvider>().getAllPopularMovie(
+      context.read<DiscoverMovieViewModel>().getAllDiscoverMovie(
             context,
             pagingController: _pagingController,
             page: pageKey,
@@ -34,7 +34,7 @@ class _ViewAllTopRatedMoviePageState extends State<ViewAllTopRatedMoviePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Top Rated Movies"),
+        title: const Text("Discover Movies"),
       ),
       body: PagedListView.separated(
         padding: const EdgeInsets.all(16),

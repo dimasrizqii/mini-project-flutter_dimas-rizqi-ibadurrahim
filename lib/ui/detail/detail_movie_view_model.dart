@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mini_project/models/repository/movie_repository.dart';
 import 'package:mini_project/models/tmdb_responses/detail_movie_response_model.dart';
 
-class DetailMovieProvider with ChangeNotifier {
+class DetailMovieViewModel with ChangeNotifier {
   final MovieRepository _movieRepository;
 
-  DetailMovieProvider(
+  DetailMovieViewModel(
     this._movieRepository,
   );
 

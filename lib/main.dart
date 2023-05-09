@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mini_project/di/injection.dart';
-import 'package:mini_project/pages/list_movie_page.dart';
-import 'package:mini_project/providers/detail_movie_provider.dart';
-import 'package:mini_project/providers/discover_movie_provider.dart';
-import 'package:mini_project/providers/top_rated_movie_provider.dart';
+import 'package:mini_project/ui/home/list_movie_page.dart';
+import 'package:mini_project/ui/detail/detail_movie_view_model.dart';
+import 'package:mini_project/ui/discover/discover_movie_view_model.dart';
+import 'package:mini_project/ui/top_rated/top_rated_movie_view_model.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -19,13 +19,13 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => getIt<DiscoverMovieProvider>(),
+          create: (_) => getIt<DiscoverMovieViewModel>(),
         ),
         ChangeNotifierProvider(
-          create: (_) => getIt<TopRatedMovieProvider>(),
+          create: (_) => getIt<TopRatedMovieViewModel>(),
         ),
         ChangeNotifierProvider(
-          create: (_) => getIt<DetailMovieProvider>(),
+          create: (_) => getIt<DetailMovieViewModel>(),
         ),
       ],
       child: MaterialApp(
