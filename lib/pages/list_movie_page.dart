@@ -52,7 +52,7 @@ class ListMoviePage extends StatelessWidget {
                       );
                     },
                     child: const Text(
-                      "See All",
+                      "View All",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -96,7 +96,7 @@ class ListMoviePage extends StatelessWidget {
                       );
                     },
                     child: const Text(
-                      "See All",
+                      "View All",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

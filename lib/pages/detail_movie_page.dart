@@ -31,7 +31,7 @@ class _DetailMovieAppBarWidget extends SliverAppBar {
   const _DetailMovieAppBarWidget(this.context);
 
   @override
-  double? get expandedHeight => 450;
+  double? get expandedHeight => 480;
 
   @override
   Widget? get flexibleSpace => Consumer<DetailMovieProvider>(
@@ -51,4 +51,38 @@ class _DetailMovieAppBarWidget extends SliverAppBar {
       );
 }
 
-class _DetailMovieBoxWidget extends SliverToBoxAdapter {}
+class _DetailMovieBoxWidget extends SliverToBoxAdapter {
+  @override
+  Widget? get child => Consumer<DetailMovieProvider>(
+        builder: (_, provider, __) {
+          final detailMovie = provider.detailMovies;
+
+          if (detailMovie != null) {
+            return Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Overview",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    detailMovie.overview,
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                  )
+                ],
+              ),
+            );
+          }
+
+          return Container();
+        },
+      );
+}
