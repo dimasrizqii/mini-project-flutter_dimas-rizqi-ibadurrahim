@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mini_project/constant/tmdb_api_constant.dart';
 import 'package:mini_project/models/tmdb_responses/movie_response_model.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ItemMovieWidget extends Container {
   final MovieModel movie;
@@ -28,12 +30,21 @@ class ItemMovieWidget extends Container {
   @override
   Widget? get child => Stack(
         children: [
-          Image.network(
-            "$imageOriginalUrl${movie.backdropPath}",
+          CachedNetworkImage(
+            imageUrl: "$imageOriginalUrl${movie.backdropPath}",
             height: height,
             width: width,
             fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) {
+            placeholder: (context, url) => Shimmer.fromColors(
+              baseColor: Colors.grey[850]!,
+              highlightColor: Colors.grey[700]!,
+              child: Container(
+                height: height,
+                width: width,
+                color: Colors.grey[850],
+              ),
+            ),
+            errorWidget: (context, url, error) {
               return SizedBox(
                 height: height,
                 width: width,

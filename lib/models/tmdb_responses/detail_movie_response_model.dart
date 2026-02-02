@@ -40,7 +40,11 @@ class DetailMovieResponseModel {
         adult: json["adult"],
         backdropPath: json["backdrop_path"],
         budget: json["budget"],
-        genres: List<Genre>.from(json["genres"].map((x) => Genre.fromMap(x))),
+        genres: List<Genre>.from(
+          json["genres"].map(
+            (x) => Genre.fromMap(x),
+          ),
+        ),
         homepage: json["homepage"],
         id: json["id"],
         overview: json["overview"],

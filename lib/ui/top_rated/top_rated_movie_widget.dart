@@ -1,8 +1,8 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:mini_project/ui/detail/detail_movie_page.dart';
 import 'package:mini_project/ui/top_rated/top_rated_movie_view_model.dart';
 import 'package:mini_project/widgets/item_movie_widget.dart';
+import 'package:mini_project/widgets/shimmer_loading.dart';
 import 'package:provider/provider.dart';
 
 class TopRatedMovieWidget extends StatefulWidget {
@@ -13,6 +13,8 @@ class TopRatedMovieWidget extends StatefulWidget {
 }
 
 class _TopRatedMovieWidgetState extends State<TopRatedMovieWidget> {
+  final PageController _pageController = PageController(viewportFraction: 0.8);
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -22,11 +24,69 @@ class _TopRatedMovieWidgetState extends State<TopRatedMovieWidget> {
   }
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _onRefresh() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    if (mounted) {
+      context.read<TopRatedMovieViewModel>().getTopRatedMovie(context);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Consumer<TopRatedMovieViewModel>(
-        builder: (_, provider, __) {
-          if (provider.isLoadingPopularMovie) {
+      child: RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: Consumer<TopRatedMovieViewModel>(
+          builder: (_, provider, __) {
+            if (provider.isLoadingPopularMovie) {
+              return Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                height: 300,
+                child: const HorizontalMovieShimmer(),
+              );
+            }
+
+            if (provider.movies.isNotEmpty) {
+              return Column(
+                children: [
+                  SizedBox(
+                    height: 300,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: provider.movies.length,
+                      itemBuilder: (_, index) {
+                        final movie = provider.movies[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: ItemMovieWidget(
+                            movie: movie,
+                            height: 300,
+                            width: double.infinity,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) {
+                                    return DetailMoviePage(id: movie.id);
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              );
+            }
+
             return Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
               height: 300,
@@ -35,63 +95,37 @@ class _TopRatedMovieWidgetState extends State<TopRatedMovieWidget> {
                 color: Colors.black26,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Center(
-                child: CircularProgressIndicator(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: Colors.white54,
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "Failed to load Top Rated Movies",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      context
+                          .read<TopRatedMovieViewModel>()
+                          .getTopRatedMovie(context);
+                    },
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('Retry'),
+                  ),
+                ],
               ),
             );
-          }
-
-          if (provider.movies.isNotEmpty) {
-            return CarouselSlider.builder(
-              itemCount: provider.movies.length,
-              itemBuilder: (_, index, __) {
-                final movie = provider.movies[index];
-                return ItemMovieWidget(
-                  movie: movie,
-                  height: 300,
-                  width: double.infinity,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) {
-                          return DetailMoviePage(
-                            id: movie.id,
-                          );
-                        },
-                      ),
-                    );
-                  },
-                );
-              },
-              options: CarouselOptions(
-                height: 300.0,
-                viewportFraction: 0.8,
-                reverse: false,
-                autoPlay: true,
-                autoPlayCurve: Curves.fastOutSlowIn,
-                enlargeCenterPage: true,
-                scrollDirection: Axis.horizontal,
-              ),
-            );
-          }
-
-          return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            height: 300,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.black26,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Center(
-              child: Text(
-                "Not Found Top Rated Movie",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-            ),
-          );
-        },
+          },
+        ),
       ),
     );
   }

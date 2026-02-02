@@ -15,7 +15,10 @@ class MovieResponseModel {
       MovieResponseModel(
         page: json["page"],
         results: List<MovieModel>.from(
-            json["results"].map((x) => MovieModel.fromMap(x))),
+          json["results"].map(
+            (x) => MovieModel.fromMap(x),
+          ),
+        ),
         totalPages: json["total_pages"],
         totalResults: json["total_results"],
       );

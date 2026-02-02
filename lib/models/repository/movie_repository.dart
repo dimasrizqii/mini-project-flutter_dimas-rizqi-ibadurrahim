@@ -7,6 +7,10 @@ abstract class MovieRepository {
   Future<Either<String, MovieResponseModel>> getDiscover({int page = 1});
   Future<Either<String, MovieResponseModel>> getTopRated({int page = 1});
   Future<Either<String, DetailMovieResponseModel>> getDetail({required int id});
+  Future<Either<String, MovieResponseModel>> searchMovies({
+    required String query,
+    int page = 1,
+  });
 }
 
 class MovieRepositoryImpl implements MovieRepository {
@@ -28,7 +32,7 @@ class MovieRepositoryImpl implements MovieRepository {
       }
 
       return const Left("Error get Discover Movies");
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.response != null) {
         return Left(e.response.toString());
       }
@@ -50,7 +54,7 @@ class MovieRepositoryImpl implements MovieRepository {
       }
 
       return const Left("Error get Top Rated Movies");
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.response != null) {
         return Left(e.response.toString());
       }
@@ -59,7 +63,8 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<String, DetailMovieResponseModel>> getDetail({required int id}) async {
+  Future<Either<String, DetailMovieResponseModel>> getDetail(
+      {required int id}) async {
     try {
       final result = await _dio.get(
         '/movie/$id',
@@ -71,11 +76,39 @@ class MovieRepositoryImpl implements MovieRepository {
       }
 
       return const Left("Error get Detail Movies");
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.response != null) {
         return Left(e.response.toString());
       }
       return const Left("Another error on get Detail Movies");
+    }
+  }
+
+  @override
+  Future<Either<String, MovieResponseModel>> searchMovies({
+    required String query,
+    int page = 1,
+  }) async {
+    try {
+      final result = await _dio.get(
+        '/search/movie',
+        queryParameters: {
+          'query': query,
+          'page': page,
+        },
+      );
+
+      if (result.statusCode == 200 && result.data != null) {
+        final model = MovieResponseModel.fromMap(result.data);
+        return Right(model);
+      }
+
+      return const Left("Error searching movies");
+    } on DioException catch (e) {
+      if (e.response != null) {
+        return Left(e.response.toString());
+      }
+      return const Left("Another error on searching movies");
     }
   }
 }
